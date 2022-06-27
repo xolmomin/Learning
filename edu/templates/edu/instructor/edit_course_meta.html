@@ -1,0 +1,89 @@
+{% extends 'edu/courses/../base/base.html' %}
+{% load static %}
+
+{% block title %}
+    edit-course-meta
+{% endblock %}
+
+{% block main_content %}
+    {% include 'edu/base/navbar.html' %}
+    {% include 'edu/base/sidebar_left_instructor.html' %}
+        <div class="st-pusher" id="content">
+
+
+      <div class="st-content">
+
+        <!-- extra div for emulating position:fixed of the menu -->
+        <div class="st-content-inner padding-none">
+
+          <div class="container-fluid">
+
+            <div class="page-section">
+              <h1 class="text-display-1">Create New Course</h1>
+            </div>
+
+            <!-- Tabbable Widget -->
+            <div class="tabbable paper-shadow relative" data-z="0.5">
+
+              <!-- Tabs -->
+              <ul class="nav nav-tabs">
+                <li><a href="{% url 'edit_course' %}"><i class="fa fa-fw fa-lock"></i> <span class="hidden-sm hidden-xs">Course</span></a></li>
+                <li class="active"><a href="{% url 'edit_course_meta' %}"><i class="fa fa-fw fa-credit-card"></i> <span class="hidden-sm hidden-xs">Meta</span></a></li>
+                <li><a href="{% url 'edit_course_lesson' %}"><i class="fa fa-fw fa-credit-card"></i> <span class="hidden-sm hidden-xs">Lessons</span></a></li>
+              </ul>
+              <!-- // END Tabs -->
+
+              <!-- Panes -->
+              <div class="tab-content">
+
+                <div id="meta" class="tab-pane active">
+                  <form class="form-horizontal">
+                    <div class="form-group">
+                      <label for="select" class="col-sm-3 control-label">Category</label>
+                      <div class="col-sm-9 col-md-9">
+                        <select id="select" class="form-control select2">
+                          <option value="#">HTML</option>
+                          <option value="#">Angular JS</option>
+                          <option value="#">CSS / LESS</option>
+                          <option value="#">Design / Concept</option>
+                        </select>
+                      </div>
+                    </div>
+                    <div class="form-group">
+                      <label for="duration" class="col-sm-3 control-label">Course Duration</label>
+                      <div class="col-sm-4 col-md-2">
+                        <input type="text" class="form-control" placeholder="No. of Days" value="10">
+                      </div>
+                    </div>
+                    <div class="form-group">
+                      <label for="start" class="col-sm-3 control-label">Start Date</label>
+                      <div class="col-sm-9 col-md-4">
+                        <input id="datepicker" type="text" class="form-control datepicker">
+                      </div>
+                    </div>
+                    <div class="form-group">
+                      <label for="end" class="col-sm-3 control-label">End Date</label>
+                      <div class="col-sm-9 col-md-4">
+                        <input id="datepicker" type="text" class="form-control datepicker">
+                      </div>
+                    </div>
+                  </form>
+                </div>
+
+              </div>
+              <!-- // END Panes -->
+
+            </div>
+            <!-- // END Tabbable Widget -->
+
+          </div>
+
+        </div>
+        <!-- /st-content-inner -->
+
+      </div>
+      <!-- /st-content -->
+
+    </div>
+    {% include 'edu/base/footer.html' %}
+{% endblock %}
