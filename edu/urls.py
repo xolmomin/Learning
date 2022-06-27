@@ -17,4 +17,6 @@ urlpatterns = [
     path('sign-up/', TemplateView.as_view(template_name='sign-up.html'), name="sign-up"),
     path('survey/', TemplateView.as_view(template_name='survey.html'), name="survey"),
     path('tutors/', TemplateView.as_view(template_name='tutors.html'), name="tutors"),
+    path('website-blog/', TemplateView.as_view(template_name='website-blog.html'), name="website-blog"),
+    path('website-blog-post/', TemplateView.as_view(template_name='website-blog-post.html'), name="website-blog-post"),
 ]
