@@ -1,7 +1,8 @@
 import os
+import sys
 from pathlib import Path
-
 BASE_DIR = Path(__file__).resolve().parent.parent
+sys.path.append(os.path.join(BASE_DIR, 'apps'))
 
 SECRET_KEY = 'django-insecure--_t5jhk+@39&4!h%_i94!vp6#&4m2#splr^i0vhwgt2x6@-7i1'
 
@@ -19,8 +20,8 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'student_application',
-    'edu',
+    'apps.web',
+    'apps.edu',
 ]
 
 MIDDLEWARE = [
