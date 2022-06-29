@@ -1,7 +1,9 @@
 import os
 import sys
 from pathlib import Path
+
 BASE_DIR = Path(__file__).resolve().parent.parent
+
 sys.path.append(os.path.join(BASE_DIR, 'apps'))
 
 SECRET_KEY = 'django-insecure--_t5jhk+@39&4!h%_i94!vp6#&4m2#splr^i0vhwgt2x6@-7i1'
@@ -20,9 +22,12 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'apps.billings',
+
+
+    # Apps
     'apps.users',
-    'apps.courses',
+
+    # Third-party
 
 ]
 
@@ -56,18 +61,18 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'config.wsgi.application'
 
-
 # Database
 # https://docs.djangoproject.com/en/4.0/ref/settings/#databases
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'learning',
-        'USER': os.environ.get("POSTGRES_USER"),
-        'PASSWORD': os.environ.get("POSTGRES_PASSWORD"),
-        'HOST': 'localhost',
-        'PORT': '5432',
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': BASE_DIR / 'db.sqlite3',
+        # 'NAME': 'learning',
+        # 'USER': os.environ.get("POSTGRES_USER"),
+        # 'PASSWORD': os.environ.get("POSTGRES_PASSWORD"),
+        # 'HOST': 'localhost',
+        # 'PORT': '5432',
     }
 }
 
@@ -107,8 +112,10 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/4.0/howto/static-files/
 
 STATIC_URL = '/static/'
-STATIC_ROOT = os.path.join(BASE_DIR, 'static')
-
+# STATIC_ROOT = os.path.join(BASE_DIR, 'static')
+STATICFILES_DIRS = [
+    'static'
+]
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
