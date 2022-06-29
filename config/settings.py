@@ -24,10 +24,11 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
 
 
-
+    #apps
     'apps.users',
     'apps.courses',
     'apps.billings',
+
     # Third-party
 
 
