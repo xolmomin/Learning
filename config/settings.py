@@ -8,7 +8,7 @@ SECRET_KEY = 'django-insecure--_t5jhk+@39&4!h%_i94!vp6#&4m2#splr^i0vhwgt2x6@-7i1
 
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ["*"]
 
 
 # Application definition
@@ -20,9 +20,9 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'apps.billlings',
+    'apps.billings',
     'apps.users',
-    'apps.coureses',
+    'apps.courses',
 
 ]
 
@@ -92,7 +92,7 @@ AUTH_PASSWORD_VALIDATORS = [
 
 LANGUAGE_CODE = 'en-us'
 
-TIME_ZONE = 'UTC'
+TIME_ZONE = 'Asia/Tashkent'
 
 USE_I18N = True
 
