@@ -56,7 +56,7 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'config.wsgi.application'
 
-
+reverse_lazy
 # Database
 # https://docs.djangoproject.com/en/4.0/ref/settings/#databases
 
