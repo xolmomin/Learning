@@ -1,6 +1,6 @@
 from django.contrib import messages
 from django.contrib import messages
-from django.contrib.auth import login
+from django.contrib.auth import login, authenticate
 from django.contrib.auth.views import LoginView
 from django.http import HttpResponse
 from django.shortcuts import redirect
@@ -96,7 +96,7 @@ class ActivateEmailView(TemplateView):
         if user is not None and account_activation_token.check_token(user, token):
             user.is_active = True
             user.save()
-            login(request, user)
+            login(request, user, backend='django.contrib.auth.backends.ModelBackend')
             messages.add_message(
                 request=request,
                 level=messages.SUCCESS,
