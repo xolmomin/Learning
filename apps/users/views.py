@@ -1,16 +1,19 @@
-from django.shortcuts import render
-from django.views.generic import TemplateView
+from django.contrib import messages
+from django.contrib import messages
+from django.contrib.auth import login
+from django.contrib.auth.views import LoginView
+from django.http import HttpResponse
+from django.shortcuts import redirect
+from django.urls import reverse_lazy
+from django.utils.encoding import force_str
+from django.utils.http import urlsafe_base64_decode
+from django.views.generic import FormView, TemplateView
+
+from apps.users.forms import RegisterForm, LoginForm, ForgotPasswordForm, send_email
+from apps.users.models import User
+from apps.users.token import account_activation_token
 
 
-class IndexPage(TemplateView):
-    template_name = 'apps/index.html'
-
-
-class AppStudentDashboard(TemplateView):
-    template_name = 'apps/students/app-student-dashboard.html'
-
-
-#forum
 class ForumHome(TemplateView):
     template_name = 'apps/forum/forum_home.html'
 
@@ -23,50 +26,9 @@ class ForumThread(TemplateView):
     template_name = 'apps/forum/forum_thread.html'
 
 
-#courses
-class CoursesGrid(TemplateView):
-    template_name = 'apps/courses/courses-grid.html'
-
-
-class CoursesList(TemplateView):
-    template_name = 'apps/courses/courses_list.html'
-
-
-class CoursesDetails(TemplateView):
-    template_name = 'apps/courses/courses_detail.html'
-
-
 #students
-class MyCourses(TemplateView):
-    template_name = 'apps/students/my_courses.html'
-
-
-class TakeCourses(TemplateView):
-    template_name = 'apps/students/take_course.html'
-
-
-class CoursesForums(TemplateView):
-    template_name = 'apps/students/course_forums.html'
-
-
-class TakeQuiz(TemplateView):
-    template_name = 'apps/students/take_quiz.html'
-
-
 class EditProfile(TemplateView):
     template_name = 'apps/students/edit_profile.html'
-
-
-class EditBilling(TemplateView):
-    template_name = 'apps/students/edit_billing.html'
-
-
-class Messages(TemplateView):
-    template_name = 'apps/students/messages.html'
-
-
-class CourseForumThread(TemplateView):
-    template_name = 'apps/students/course_forum_thread.html'
 
 
 #instructor
@@ -74,51 +36,72 @@ class Dashboard(TemplateView):
     template_name = 'apps/instructor/dashboard.html'
 
 
-class InstructorMyCourse(TemplateView):
-    template_name = 'apps/instructor/instructor_my_course.html'
-
-
-class EditCourse(TemplateView):
-    template_name = 'apps/instructor/edit_course.html'
-
-
-class EditCourseMeta(TemplateView):
-    template_name = 'apps/instructor/edit_course_meta.html'
-
-
-class EditCourseLesson(TemplateView):
-    template_name = 'apps/instructor/edit_course_lesson.html'
-
-
-class Earnings(TemplateView):
-    template_name = 'apps/instructor/earnings.html'
-
-
-class Statement(TemplateView):
-    template_name = 'apps/instructor/statement.html'
-
-
 class EditProfileInstructor(TemplateView):
     template_name = 'apps/instructor/edit_profile_instructor.html'
 
 
-class EditBillingInstructor(TemplateView):
-    template_name = 'apps/instructor/edit_billing_instructor.html'
-
-
-class MessagesInstructor(TemplateView):
-    template_name = 'apps/instructor/messages_instructor.html'
-
-
 #auth
-class Login(TemplateView):
+class Login(LoginView):
+    form_class = LoginForm
+    success_url = reverse_lazy('index_page')
     template_name = 'apps/auth/login.html'
 
 
-class Register(TemplateView):
+class Register(FormView):
+    form_class = RegisterForm
+    success_url = reverse_lazy('login')
     template_name = 'apps/auth/register.html'
 
+    def form_valid(self, form):
+        form.save()
+        send_email(form.data.get('email'), self.request, 'register')
+        messages.add_message(
+            self.request,
+            level=messages.WARNING,
+            message='Successfully send your email, Please activate your profile'
+        )
+        return super().form_valid(form)
 
-#website
-class WebsiteStudentDashboard(TemplateView):
-    template_name = 'apps/website/website_student_dashboard.html'
+
+class ForgotPasswordPage(FormView):
+    form_class = ForgotPasswordForm
+    success_url = reverse_lazy('confirm_mail')
+    template_name = 'apps/auth/forgot_password.html'
+
+    def form_valid(self, form):
+        send_email(form.data.get('email'), self.request, 'forgot')
+        return super().form_valid(form)
+
+    def form_invalid(self, form):
+        return super().form_invalid(form)
+
+
+class ResetPassword(TemplateView):
+    template_name = 'apps/auth/reset_password.html'
+
+
+class ActivateEmailView(TemplateView):
+    template_name = 'apps/auth/confirm_mail.html'
+
+    def get(self, request, *args, **kwargs):
+        uid = kwargs.get('uid')
+        token = kwargs.get('token')
+
+        try:
+            uid = force_str(urlsafe_base64_decode(uid))
+            user = User.objects.get(pk=uid)
+        except Exception as e:
+            print(e)
+            user = None
+        if user is not None and account_activation_token.check_token(user, token):
+            user.is_active = True
+            user.save()
+            login(request, user)
+            messages.add_message(
+                request=request,
+                level=messages.SUCCESS,
+                message="Your account successfully activated!"
+            )
+            return redirect('login')
+        else:
+            return HttpResponse('Activation link is invalid!')

@@ -1,68 +1,181 @@
 {% load static %}
 <!DOCTYPE html>
-<html class="hide-sidebar ls-bottom-footer" lang="en">
+<html lang="en-US" dir="ltr">
 
-<head>
-  <meta charset="utf-8">
-  <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="description" content="">
-  <meta name="author" content="">
-  <title>Learning</title>
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>{% block title %}{% endblock %}</title>
 
 
-  <link href="{% static 'apps/css/vendor/all.css' %}" rel="stylesheet">
+    <!-- ===============================================-->
+    <!--    Favicons-->
+    <!-- ===============================================-->
+    <link rel="apple-touch-icon" sizes="180x180" href="{% static 'apps/assets/img/favicons/apple-touch-icon.png' %}">
+    <link rel="icon" type="image/png" sizes="32x32" href="{% static 'apps/assets/img/favicons/favicon-32x32.png' %}">
+    <link rel="icon" type="image/png" sizes="16x16" href="{% static 'apps/assets/img/favicons/favicon-16x16.png' %}">
+    <link rel="shortcut icon" type="image/x-icon" href="{% static 'apps/assets/img/favicons/favicon.ico' %}">
+    <link rel="manifest" href="{% static 'apps/assets/img/favicons/manifest.json' %}">
+    <meta name="msapplication-TileImage" content="{% static 'apps/assets/img/favicons/mstile-150x150.png' %}">
+    <meta name="theme-color" content="#ffffff">
+    <script src="{% static 'apps/assets/js/config.js' %}"></script>
+    <script src="{% static 'apps/vendors/overlayscrollbars/OverlayScrollbars.min.js' %}"></script>
 
-  <link href="{% static 'apps/css/app/app.css' %}" rel="stylesheet">
+
+    <!-- ===============================================-->
+    <!--    Stylesheets-->
+    <!-- ===============================================-->
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,500,600,700%7cPoppins:300,400,500,600,700,800,900&amp;display=swap" rel="stylesheet">
+    <link href="{% static 'apps/vendors/overlayscrollbars/OverlayScrollbars.min.css' %}" rel="stylesheet">
+    <link href="{% static 'apps/assets/css/theme-rtl.min.css' %}" rel="stylesheet" id="style-rtl">
+    <link href="{% static 'apps/assets/css/theme.min.css' %}" rel="stylesheet" id="style-default">
+    <link href="{% static 'apps/assets/css/user-rtl.min.css' %}" rel="stylesheet" id="user-style-rtl">
+    <link href="{% static 'apps/assets/css/user.min.css' %}" rel="stylesheet" id="user-style-default">
+    <script>
+      var isRTL = JSON.parse(localStorage.getItem('isRTL'));
+      if (isRTL) {
+        var linkDefault = document.getElementById('style-default');
+        var userLinkDefault = document.getElementById('user-style-default');
+        linkDefault.setAttribute('disabled', true);
+        userLinkDefault.setAttribute('disabled', true);
+        document.querySelector('html').setAttribute('dir', 'rtl');
+      } else {
+        var linkRTL = document.getElementById('style-rtl');
+        var userLinkRTL = document.getElementById('user-style-rtl');
+        linkRTL.setAttribute('disabled', true);
+        userLinkRTL.setAttribute('disabled', true);
+      }
+    </script>
+  </head>
 
 
+  <body>
 
-
-<script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
-<script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
-<![endif]-->
-
-</head>
-
-<body class="login">
-
+    <!-- ===============================================-->
+    <!--    Main Content-->
+    <!-- ===============================================-->
         {% block main_content %}
         {% endblock %}
+    <!-- ===============================================-->
+    <!--    End of Main Content-->
+    <!-- ===============================================-->
 
-  <!-- Footer -->
-  <footer class="footer">
-    <strong>Learning</strong> v1.1.0 &copy; Copyright by shohruh
-  </footer>
-  <!-- // Footer -->
 
-  <script>
-    var colors = {
-      "danger-color": "#e74c3c",
-      "success-color": "#81b53e",
-      "warning-color": "#f0ad4e",
-      "inverse-color": "#2c3e50",
-      "info-color": "#2d7cb5",
-      "default-color": "#6e7882",
-      "default-light-color": "#cfd9db",
-      "purple-color": "#9D8AC7",
-      "mustard-color": "#d4d171",
-      "lightred-color": "#e15258",
-      "body-bg": "#f6f6f6"
-    };
-    var config = {
-      theme: "html",
-      skins: {
-        "default": {
-          "primary-color": "#42a5f5"
-        }
-      }
-    };
-  </script>
+    <div class="offcanvas offcanvas-end settings-panel border-0" id="settings-offcanvas" tabindex="-1" aria-labelledby="settings-offcanvas">
+      <div class="offcanvas-header settings-panel-header bg-shape">
+        <div class="z-index-1 py-1 light">
+          <h5 class="text-white"> <span class="fas fa-palette me-2 fs-0"></span>Settings</h5>
+          <p class="mb-0 fs--1 text-white opacity-75"> Set your own customized style</p>
+        </div>
+        <button class="btn-close btn-close-white z-index-1 mt-0" type="button" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+      </div>
+      <div class="offcanvas-body scrollbar-overlay px-card" id="themeController">
+        <h5 class="fs-0">Color Scheme</h5>
+        <p class="fs--1">Choose the perfect color mode for your app.</p>
+        <div class="btn-group d-block w-100 btn-group-navbar-style">
+          <div class="row gx-2">
+            <div class="col-6">
+              <input class="btn-check" id="themeSwitcherLight" name="theme-color" type="radio" value="light" data-theme-control="theme" />
+              <label class="btn d-inline-block btn-navbar-style fs--1" for="themeSwitcherLight"> <span class="hover-overlay mb-2 rounded d-block"><img class="img-fluid img-prototype mb-0" src="{% static 'apps/assets/img/generic/falcon-mode-default.jpg' %}" alt=""/></span><span class="label-text">Light</span></label>
+            </div>
+            <div class="col-6">
+              <input class="btn-check" id="themeSwitcherDark" name="theme-color" type="radio" value="dark" data-theme-control="theme" />
+              <label class="btn d-inline-block btn-navbar-style fs--1" for="themeSwitcherDark"> <span class="hover-overlay mb-2 rounded d-block"><img class="img-fluid img-prototype mb-0" src="{% static 'apps/assets/img/generic/falcon-mode-dark.jpg' %}" alt=""/></span><span class="label-text"> Dark</span></label>
+            </div>
+          </div>
+        </div>
+        <hr />
+        <div class="d-flex justify-content-between">
+          <div class="d-flex align-items-start"><img class="me-2" src="{% static 'apps/assets/img/icons/left-arrow-from-left.svg' %}" width="20" alt="" />
+            <div class="flex-1">
+              <h5 class="fs-0">RTL Mode</h5>
+              <p class="fs--1 mb-0">Switch your language direction </p><a class="fs--1" href="../../../documentation/customization/configuration.html">RTL Documentation</a>
+            </div>
+          </div>
+          <div class="form-check form-switch">
+            <input class="form-check-input ms-0" id="mode-rtl" type="checkbox" data-theme-control="isRTL" />
+          </div>
+        </div>
+        <hr />
+        <div class="d-flex justify-content-between">
+          <div class="d-flex align-items-start"><img class="me-2" src="{% static 'apps/assets/img/icons/arrows-h.svg' %}" width="20" alt="" />
+            <div class="flex-1">
+              <h5 class="fs-0">Fluid Layout</h5>
+              <p class="fs--1 mb-0">Toggle container layout system </p><a class="fs--1" href="../../../documentation/customization/configuration.html">Fluid Documentation</a>
+            </div>
+          </div>
+          <div class="form-check form-switch">
+            <input class="form-check-input ms-0" id="mode-fluid" type="checkbox" data-theme-control="isFluid" />
+          </div>
+        </div>
+        <hr />
+        <div class="d-flex align-items-start"><img class="me-2" src="{% static 'apps/assets/img/icons/paragraph.svg' %}" width="20" alt="" />
+          <div class="flex-1">
+            <h5 class="fs-0 d-flex align-items-center">Navigation Position </h5>
+            <p class="fs--1 mb-2">Select a suitable navigation system for your web application </p>
+            <div>
+              <div class="form-check form-check-inline">
+                <input class="form-check-input" id="option-navbar-vertical" type="radio" name="navbar" value="vertical" data-page-url="../../../modules/components/navs-and-tabs/vertical-navbar.html" data-theme-control="navbarPosition" />
+                <label class="form-check-label" for="option-navbar-vertical">Vertical</label>
+              </div>
+              <div class="form-check form-check-inline">
+                <input class="form-check-input" id="option-navbar-top" type="radio" name="navbar" value="top" data-page-url="../../../modules/components/navs-and-tabs/top-navbar.html" data-theme-control="navbarPosition" />
+                <label class="form-check-label" for="option-navbar-top">Top</label>
+              </div>
+              <div class="form-check form-check-inline me-0">
+                <input class="form-check-input" id="option-navbar-combo" type="radio" name="navbar" value="combo" data-page-url="../../../modules/components/navs-and-tabs/combo-navbar.html" data-theme-control="navbarPosition" />
+                <label class="form-check-label" for="option-navbar-combo">Combo</label>
+              </div>
+            </div>
+          </div>
+        </div>
+        <hr />
+        <h5 class="fs-0 d-flex align-items-center">Vertical Navbar Style</h5>
+        <p class="fs--1 mb-0">Switch between styles for your vertical navbar </p>
+        <p> <a class="fs--1" href="../../../modules/components/navs-and-tabs/vertical-navbar.html#navbar-styles">See Documentation</a></p>
+        <div class="btn-group d-block w-100 btn-group-navbar-style">
+          <div class="row gx-2">
+            <div class="col-6">
+              <input class="btn-check" id="navbar-style-transparent" type="radio" name="navbarStyle" value="transparent" data-theme-control="navbarStyle" />
+              <label class="btn d-block w-100 btn-navbar-style fs--1" for="navbar-style-transparent"> <img class="img-fluid img-prototype" src="{% static 'apps/assets/img/generic/default.png' %}" alt="" /><span class="label-text"> Transparent</span></label>
+            </div>
+            <div class="col-6">
+              <input class="btn-check" id="navbar-style-inverted" type="radio" name="navbarStyle" value="inverted" data-theme-control="navbarStyle" />
+              <label class="btn d-block w-100 btn-navbar-style fs--1" for="navbar-style-inverted"> <img class="img-fluid img-prototype" src="{% static 'apps/assets/img/generic/inverted.png' %}" alt="" /><span class="label-text"> Inverted</span></label>
+            </div>
+            <div class="col-6">
+              <input class="btn-check" id="navbar-style-card" type="radio" name="navbarStyle" value="card" data-theme-control="navbarStyle" />
+              <label class="btn d-block w-100 btn-navbar-style fs--1" for="navbar-style-card"> <img class="img-fluid img-prototype" src="{% static 'apps/assets/img/generic/card.png' %}" alt="" /><span class="label-text"> Card</span></label>
+            </div>
+            <div class="col-6">
+              <input class="btn-check" id="navbar-style-vibrant" type="radio" name="navbarStyle" value="vibrant" data-theme-control="navbarStyle" />
+              <label class="btn d-block w-100 btn-navbar-style fs--1" for="navbar-style-vibrant"> <img class="img-fluid img-prototype" src="{% static 'apps/assets/img/generic/vibrant.png' %}" alt="" /><span class="label-text"> Vibrant</span></label>
+            </div>
+          </div>
+        </div>
+        <div class="text-center mt-5"><img class="mb-4" src="{% static 'apps/assets/img/icons/spot-illustrations/47.png' %}" alt="" width="120" />
+          <h5>Like What You See?</h5>
+          <p class="fs--1">Get Falcon now and create beautiful dashboards with hundreds of widgets.</p><a class="mb-3 btn btn-primary" href="https://themes.getbootstrap.com/product/falcon-admin-dashboard-webapp-template/" target="_blank">Purchase</a>
+        </div>
+      </div>
+    </div>
 
-  <script src="{% static 'apps/js/vendor/all.js' %}"></script>
 
-  <script src="{% static 'apps/js/app/app.js' %}"></script>
+    <!-- ===============================================-->
+    <!--    JavaScripts-->
+    <!-- ===============================================-->
+    <script src="{% static 'apps/vendors/popper/popper.min.js' %}"></script>
+    <script src="{% static 'apps/vendors/bootstrap/bootstrap.min.js' %}"></script>
+    <script src="{% static 'apps/vendors/anchorjs/anchor.min.js' %}"></script>
+    <script src="{% static 'apps/vendors/is/is.min.js' %}"></script>
+    <script src="{% static 'apps/vendors/fontawesome/all.min.js' %}"></script>
+    <script src="{% static 'apps/vendors/lodash/lodash.min.js' %}"></script>
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=window.scroll"></script>
+    <script src="{% static 'apps/vendors/list.js/list.min.js' %}"></script>
+    <script src="{% static 'apps/assets/js/theme.js' %}"></script>
 
-</body>
+  </body>
 
 </html>

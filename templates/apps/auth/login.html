@@ -1,37 +1,86 @@
-{% extends 'apps/auth/base_auth.html' %}
+{% extends 'apps/courses/../base/../auth/base_auth.html' %}
 {% load static %}
 
+{% block title %}
+    login
+{% endblock %}
+
 {% block main_content %}
-  <div id="content">
-    <div class="container-fluid">
+    <main class="main" id="top">
+      <div class="container" data-layout="container">
+        <script>
+          var isFluid = JSON.parse(localStorage.getItem('isFluid'));
+          if (isFluid) {
+            var container = document.querySelector('[data-layout]');
+            container.classList.remove('container');
+            container.classList.add('container-fluid');
+          }
+        </script>
+        <div class="row flex-center min-vh-100 py-6">
+          <div class="col-sm-10 col-md-8 col-lg-6 col-xl-5 col-xxl-4"><a class="d-flex flex-center mb-4" href="{% url 'index_page' %}">
+              <img class="me-2" alt="" width="15" />
+              <span class="font-sans-serif fw-bolder fs-5 d-inline-block">learning</span></a>
+            <div class="card">
+              <div class="card-body p-4 p-sm-5">
+              <div class="row flex-between-center mb-2" style="color: red">
+                    {% if messages %}
+                        {% for message in messages %}
+                            <p>{{ message }}</p>
+                        {% endfor %}
+                    {% endif %}
 
-      <div class="lock-container">
-        <div class="panel panel-default text-center paper-shadow" data-z="0.5">
-          <h1 class="text-display-1 text-center margin-bottom-none">Sign In</h1>
-          <img src="{% static 'student_application/images/people/110/guy-5.jpg' %}" class="img-circle width-80">
-          <div class="panel-body">
-            <div class="form-group">
-              <div class="form-control-material">
-                <input class="form-control" id="username" type="text" placeholder="Username">
-                <label for="username">Username</label>
+                    {% if form.errors %}
+                        <p>{{ form.errors }}</p>
+                    {% endif %}
+                <div class="row flex-between-center mb-2">
+                  <div class="col-auto">
+                    <h5>Log in</h5>
+                  </div>
+                  <div class="col-auto fs--1 text-600"><span class="mb-0 undefined">or</span> <span>
+                      <a href="{% url 'register' %}">Create an account</a></span></div>
+                </div>
+                <form method="post" action="{% url 'login' %}">
+                    {% csrf_token %}
+                  <div class="mb-3">
+                    <input class="form-control" name="email" type="email" placeholder="Email address" />
+                  </div>
+                  <div class="mb-3">
+                    <input class="form-control" name="password" type="password" placeholder="Password" />
+                  </div>
+                  <div class="row flex-between-center">
+                    <div class="col-auto">
+                      <div class="form-check mb-0">
+                        <input class="form-check-input" type="checkbox" id="basic-checkbox" checked="checked" />
+                        <label class="form-check-label mb-0" for="basic-checkbox">Remember me</label>
+                      </div>
+                    </div>
+                    <div class="col-auto"><a class="fs--1" href="{% url 'forgot_password' %}">Forgot Password?</a></div>
+                  </div>
+                  <div class="mb-3">
+                    <button class="btn btn-primary d-block w-100 mt-3" type="submit">Log in</button>
+                  </div>
+                </form>
+                <div class="position-relative mt-4">
+                  <hr class="bg-300" />
+                  <div class="divider-content-center">or log in with</div>
+                </div>
+                <div class="row g-2 mt-2">
+                  <div class="col-sm-6"><a class="btn btn-outline-google-plus btn-sm d-block w-100" href="#">
+                      <span class="fab fa-google-plus-g me-2" data-fa-transform="grow-8"></span> google</a></div>
+                  <div class="col-sm-6"><a class="btn btn-outline-facebook btn-sm d-block w-100" href="#">
+                      <span class="fab fa-facebook-square me-2" data-fa-transform="grow-8"></span> facebook</a></div>
+                    <div class="col-sm-6"><a class="btn btn-outline-facebook btn-sm d-block w-100" href="#">
+                      <span class="fab fa-github-square me-2" data-fa-transform="grow-8"></span> github</a></div>
+                    <div class="col-sm-6"><a class="btn btn-outline-facebook btn-sm d-block w-100" href="#">
+                      <span class="fab fa-instagram me-2" data-fa-transform="grow-8"></span> instagram</a></div>
+                </div>
               </div>
             </div>
-            <div class="form-group">
-              <div class="form-control-material">
-                <input class="form-control" id="password" type="password" placeholder="Enter Password">
-                <label for="password">Password</label>
-              </div>
-            </div>
-
-            <a href="{% url 'website_student_dashboard' %}" class="btn btn-primary">Login <i class="fa fa-fw fa-unlock-alt"></i></a>
-            <a href="#" class="forgot-password">Forgot password?</a>
-            <a href="{% url 'register' %}" class="link-text-color">Create account</a>
           </div>
         </div>
       </div>
-
-    </div>
-  </div>
+    </main>
+    {% include 'apps/base/../base/footer.html' %}
 {% endblock %}
 
 

@@ -1,0 +1,38 @@
+{% extends 'apps/courses/../base/../auth/base_auth.html' %}
+{% load static %}
+
+{% block title %}
+    confirm-mail
+{% endblock %}
+
+{% block main_content %}
+    <main class="main" id="top">
+      <div class="container" data-layout="container">
+        <script>
+          var isFluid = JSON.parse(localStorage.getItem('isFluid'));
+          if (isFluid) {
+            var container = document.querySelector('[data-layout]');
+            container.classList.remove('container');
+            container.classList.add('container-fluid');
+          }
+        </script>
+        <div class="row flex-center min-vh-100 py-6">
+          <div class="col-sm-10 col-md-8 col-lg-6 col-xl-5 col-xxl-4"><a class="d-flex flex-center mb-4" href="{% url 'index_page' %}">
+              <img class="me-2" alt="" width="15" />
+              <span class="font-sans-serif fw-bolder fs-5 d-inline-block">Learning</span></a>
+            <div class="card">
+              <div class="card-body p-4 p-sm-5">
+                <div class="text-center"><img class="d-block mx-auto mb-4" src="../../../assets/img/icons/spot-illustrations/16.png" alt="Email" width="100" />
+                  <h4 class="mb-2">Please check your email!</h4>
+                  <p>An email has been sent to <strong>xyz@abc.com</strong>. Please click on the included link to reset your password.
+                  </p><a class="btn btn-primary btn-sm mt-3" href="{% url 'reset_password' %}">
+                        <span class="fas fa-chevron-left me-1" data-fa-transform="shrink-4 down-1"></span>Return to reset password</a>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </main>
+    {% include 'apps/base/../base/footer.html' %}
+{% endblock %}

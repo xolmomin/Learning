@@ -14,8 +14,6 @@ env/
 # Generated files
 .idea/**/contentModel.xml
 
-static/
-
 # Sensitive or high-churn files
 .idea/**/dataSources/
 .idea/**/dataSources.ids
@@ -205,7 +203,7 @@ venv/
 ENV/
 env.bak/
 venv.bak/
-
+static/
 # Spyder project settings
 .spyderproject
 .spyproject
