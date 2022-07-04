@@ -21,6 +21,8 @@ DEBUG = True
 ALLOWED_HOSTS = ["*"]
 AUTH_USER_MODEL = 'users.User'
 
+CKEDITOR_FILENAME_GENERATOR = 'utils.get_filename'
+
 INSTALLED_APPS = [
     'django.contrib.admin',
     'django.contrib.auth',
@@ -38,6 +40,9 @@ INSTALLED_APPS = [
 
     'django.contrib.sites',
     'allauth',
+    'ckeditor',
+
+
     'allauth.account',
     'allauth.socialaccount',
     'allauth.socialaccount.providers.amazon',
@@ -67,7 +72,7 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
-
+SITE_ID = 1
 ROOT_URLCONF = 'config.urls'
 
 TEMPLATES = [
@@ -91,6 +96,7 @@ AUTH_USER_MODEL = 'users.User'
 
 # Database
 # https://docs.djangoproject.com/en/4.0/ref/settings/#databases
+
 
 DATABASES = {
     'default':{
@@ -165,6 +171,8 @@ LOGIN_REDIRECT_URL = '/'
 
 PASSWORD_RESET_TIMEOUT = 3600
 
+#ckeditor
+CKEDITOR_UPLOAD_PATH = "uploads/"
 
 #django allauth
 
