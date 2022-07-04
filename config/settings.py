@@ -1,19 +1,23 @@
 import os
 import sys
 from pathlib import Path
+import environ
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 sys.path.append(os.path.join(BASE_DIR, 'apps'))
+env = environ.Env(
+    # set casting, default value
+    DEBUG=(bool, False)
+)
+environ.Env.read_env(os.path.join(BASE_DIR, '.env'))
 
 SECRET_KEY = 'django-insecure--_t5jhk+@39&4!h%_i94!vp6#&4m2#splr^i0vhwgt2x6@-7i1'
 
 DEBUG = True
 
 ALLOWED_HOSTS = ["*"]
-
-
-# Application definition
+AUTH_USER_MODEL = 'users.User'
 
 INSTALLED_APPS = [
     'django.contrib.admin',
@@ -22,6 +26,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+
 
     #apps
     'apps.users',
@@ -179,7 +184,6 @@ TEMPLATES = [
 ]
 
 WSGI_APPLICATION = 'config.wsgi.application'
-AUTH_USER_MODEL = 'users.User'
 
 # Database
 # https://docs.djangoproject.com/en/4.0/ref/settings/#databases
@@ -187,15 +191,16 @@ AUTH_USER_MODEL = 'users.User'
 DATABASES = {
     'default':{
             'ENGINE': 'django.db.backends.postgresql_psycopg2',
-            'NAME':'learning_db',
-            'USER':'postgres',
-            'PASSWORD':'22',
-            'HOST':'localhost',
-            'PORT': 5432
+            'NAME':env("DB_NAME"),
+            'USER':env("DB_USER"),
+            'PASSWORD':env("DB_PASSWORD"),
+            'HOST':env("DB_HOST"),
+            'PORT': env("DB_PORT")
             },
 }
 
 
+# Password validation
 # https://docs.djangoproject.com/en/4.0/ref/settings/#auth-password-validators
 
 AUTH_PASSWORD_VALIDATORS = [
