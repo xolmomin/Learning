@@ -1,6 +1,6 @@
 from django.contrib.auth.base_user import BaseUserManager
 from django.contrib.auth.models import AbstractUser
-from django.db import models
+from django.db.models import Model, CharField, EmailField, DateTimeField
 
 
 class CustomUserManager(BaseUserManager):
@@ -23,8 +23,8 @@ class CustomUserManager(BaseUserManager):
 
 
 class User(AbstractUser):
-    username = models.CharField(max_length=255)
-    email = models.EmailField(unique=True)
+    username = CharField(max_length=255)
+    email = EmailField(unique=True)
     objects = CustomUserManager()
 
     USERNAME_FIELD = 'email'
@@ -33,3 +33,11 @@ class User(AbstractUser):
     class Meta:
         verbose_name = 'user'
         verbose_name_plural = 'users'
+
+
+class BaseModel(Model):
+    updated_at = DateTimeField(auto_now=True)
+    created_at = DateTimeField(auto_now_add=True)
+
+    class Meta:
+        abstract = True

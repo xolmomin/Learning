@@ -1,7 +1,7 @@
 from django.urls import path
 
 from .views import ForumHome, ForumCategory, EditProfile, Dashboard, EditProfileInstructor, Login, ForumThread, \
-    Register, ResetPassword, ActivateEmailView, ForgotPasswordPage
+    Register, ResetPassword, ActivateEmailView, ForgotPasswordPage, Logout
 
 urlpatterns = [
 
@@ -20,6 +20,7 @@ urlpatterns = [
     #auth
     path('login/', Login.as_view(), name='login'),
     path('register/', Register.as_view(), name='register'),
+    path('logout/', Logout.as_view(), name='logout'),
     path('forgot-password/', ForgotPasswordPage.as_view(), name='forgot_password'),
     path('reset-password/', ResetPassword.as_view(), name='reset_password'),
     path('activate/<str:uid>/<str:token>', ActivateEmailView.as_view(), name='confirm_mail'),

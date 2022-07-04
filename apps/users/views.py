@@ -1,7 +1,7 @@
 from django.contrib import messages
 from django.contrib import messages
 from django.contrib.auth import login, authenticate
-from django.contrib.auth.views import LoginView
+from django.contrib.auth.views import LoginView, LogoutView
 from django.http import HttpResponse
 from django.shortcuts import redirect
 from django.urls import reverse_lazy
@@ -41,13 +41,21 @@ class EditProfileInstructor(TemplateView):
 
 
 #auth
-class Login(LoginView):
+class LoginMixin:
+
+    def get(self, request, *args, **kwargs):
+        if request.user.is_authenticated:
+            return redirect('index_page')
+        return super().get(request, *args, **kwargs)
+
+
+class Login(LoginMixin, LoginView):
     form_class = LoginForm
     success_url = reverse_lazy('index_page')
     template_name = 'apps/auth/login.html'
 
 
-class Register(FormView):
+class Register(LoginMixin, FormView):
     form_class = RegisterForm
     success_url = reverse_lazy('login')
     template_name = 'apps/auth/register.html'
@@ -61,6 +69,10 @@ class Register(FormView):
             message='Successfully send your email, Please activate your profile'
         )
         return super().form_valid(form)
+
+
+class Logout(LogoutView):
+    template_name = 'apps/auth/logout.html'
 
 
 class ForgotPasswordPage(FormView):

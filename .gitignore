@@ -221,10 +221,11 @@ dmypy.json
 
 # Pyre type checker
 .pyre/
-
+static/
 # pytype static type analyzer
 .pytype/
 
 # Cython debug symbols
 cython_debug/
+
 
