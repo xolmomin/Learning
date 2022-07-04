@@ -166,14 +166,18 @@
                 <img src="{% static 'apps/images/people/110/guy-5.jpg' %}" alt="Bill" class="img-circle" width="40" /> Bill <span class="caret"></span>
               </a>
               <ul class="dropdown-menu" role="menu">
-                <li><a href="{% url 'edit_profile' %}">Account</a></li>
-                <li><a href="{% url 'edit_billing' %}">Billing</a></li>
-                <li><a href="{% url 'login' %}">Logout</a></li>
+                  {% if user.is_authenticated %}
+                    <li><a href="{% url 'edit_profile' %}">Account</a></li>
+                    <li><a href="{% url 'edit_billing' %}">Billing</a></li>
+                    <li><a href="{% url 'logout' %}">Logout</a></li>
+                  {% else %}
+                      <li><a href="{% url 'login' %}">Login</a></li>
+                      <li><a href="{% url 'register' %}">Register</a></li>
+                  {% endif %}
               </ul>
             </li>
           </ul>
         </div>
-        <!-- /.navbar-collapse -->
 
       </div>
     </div>
