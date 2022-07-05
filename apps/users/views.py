@@ -41,23 +41,23 @@ class EditProfileInstructor(TemplateView):
 
 
 #auth
-class LoginMixin:
+# class LoginMixin:
+#
+#     def get(self, request, *args, **kwargs):
+#         if request.user.is_authenticated:
+#             return redirect('index_page')
+#         return super().get(request, *args, **kwargs)
 
-    def get(self, request, *args, **kwargs):
-        if request.user.is_authenticated:
-            return redirect('index_page')
-        return super().get(request, *args, **kwargs)
 
-
-class Login(LoginMixin, LoginView):
+class Login(LoginView):
     form_class = LoginForm
-    success_url = reverse_lazy('index_page')
+    success_url = reverse_lazy('student_dashboard')
     template_name = 'apps/auth/login.html'
 
 
-class Register(LoginMixin, FormView):
+class Register(FormView):
     form_class = RegisterForm
-    success_url = reverse_lazy('login')
+    success_url = reverse_lazy('reset_password')
     template_name = 'apps/auth/register.html'
 
     def form_valid(self, form):

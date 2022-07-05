@@ -5,5 +5,6 @@ class IndexPage(TemplateView):
     template_name = 'apps/index.html'
 
 
-class AppStudentDashboard(TemplateView):
+class StudentDashboard(TemplateView):
     template_name = 'apps/students/app-student-dashboard.html'
+

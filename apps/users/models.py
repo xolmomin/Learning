@@ -25,7 +25,6 @@ class CustomUserManager(BaseUserManager):
 class User(AbstractUser):
     username = CharField(max_length=255)
     email = EmailField(unique=True)
-    role = CharField(max_length=18, choices=(('INSTRUCTOR','instructor'), ('STUDENT','student')))
     objects = CustomUserManager()
 
     USERNAME_FIELD = 'email'

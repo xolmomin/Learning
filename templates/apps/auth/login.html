@@ -17,12 +17,10 @@
           }
         </script>
         <div class="row flex-center min-vh-100 py-6">
-          <div class="col-sm-10 col-md-8 col-lg-6 col-xl-5 col-xxl-4"><a class="d-flex flex-center mb-4" href="{% url 'index_page' %}">
+          <div class="col-sm-10 col-md-8 col-lg-6 col-xl-5 col-xxl-4"><a
+                  class="d-flex flex-center mb-4" href="{% url 'index_page' %}">
               <img class="me-2" alt="" width="15" />
-              <span class="font-sans-serif fw-bolder fs-5 d-inline-block">learning</span></a>
-            <div class="card">
-              <div class="card-body p-4 p-sm-5">
-              <div class="row flex-between-center mb-2" style="color: red">
+
                     {% if messages %}
                         {% for message in messages %}
                             <p>{{ message }}</p>
@@ -32,6 +30,11 @@
                     {% if form.errors %}
                         <p>{{ form.errors }}</p>
                     {% endif %}
+              <span class="font-sans-serif fw-bo elder fs-5 d-inline-block">Learning</span></a>
+            <div class="card">
+              <div class="card-body p-4 p-sm-5">
+              <div class="row flex-between-center mb-2" style="color: red">
+
                 <div class="row flex-between-center mb-2">
                   <div class="col-auto">
                     <h5>Log in</h5>

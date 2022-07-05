@@ -57,7 +57,7 @@ class LoginForm(AuthenticationForm):
     def clean_email(self):
         email = self.data.get('email')
         if not User.objects.filter(email=email).exists():
-            raise ValidationError('')
+            raise ValidationError('this email wrong')
         return email
 
     def clean_password(self):

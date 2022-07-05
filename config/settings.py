@@ -72,7 +72,7 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
-SITE_ID = 1
+
 ROOT_URLCONF = 'config.urls'
 
 TEMPLATES = [
@@ -92,7 +92,7 @@ TEMPLATES = [
 ]
 
 WSGI_APPLICATION = 'config.wsgi.application'
-AUTH_USER_MODEL = 'users.User'
+
 
 # Database
 # https://docs.djangoproject.com/en/4.0/ref/settings/#databases
@@ -105,7 +105,7 @@ DATABASES = {
             'USER':env("DB_USER"),
             'PASSWORD':env("DB_PASSWORD"),
             'HOST':env("DB_HOST"),
-            'PORT': env("DB_PORT")
+            'PORT': 5432
             },
 }
 

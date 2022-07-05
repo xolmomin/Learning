@@ -12,7 +12,7 @@
             <span class="icon-bar"></span>
           </button>
           <div class="navbar-brand navbar-brand-primary navbar-brand-logo navbar-nav-padding-left">
-            <a class="svg" href="{% url 'app_student_dashboard' %}">
+            <a class="svg" href="{% url 'student_dashboard' %}">
               <svg viewBox="0 0 106 64" height="100%" width="100%" preserveAspectRatio="xMidYMid meet">
                 <path d="M4.731,36.187h8.234v3.414H0.279V20.481h4.452V36.187z" />
                 <path d="M21.094,39.878c-2.093,0-3.763-0.658-5.01-1.971c-1.248-1.313-1.872-2.959-1.872-4.938v-0.498
@@ -81,7 +81,7 @@
             <li class="dropdown active">
               <a href="#" class="dropdown-toggle" data-toggle="dropdown">Student <span class="caret"></span></a>
               <ul class="dropdown-menu">
-                <li class="active"><a href="{% url 'app_student_dashboard' %}">Dashboard</a></li>
+                <li class="active"><a href="{% url 'student_dashboard' %}">Dashboard</a></li>
                 <li><a href="{% url 'my_courses' %}">My Courses</a></li>
                 <li><a href="{% url 'take_courses' %}">Take Course</a></li>
                 <li><a href="{% url 'courses_forums' %}">Course Forums</a></li>
@@ -166,14 +166,10 @@
                 <img src="{% static 'apps/images/people/110/guy-5.jpg' %}" alt="Bill" class="img-circle" width="40" /> Bill <span class="caret"></span>
               </a>
               <ul class="dropdown-menu" role="menu">
-                  {% if user.is_authenticated %}
                     <li><a href="{% url 'edit_profile' %}">Account</a></li>
                     <li><a href="{% url 'edit_billing' %}">Billing</a></li>
                     <li><a href="{% url 'logout' %}">Logout</a></li>
-                  {% else %}
-                      <li><a href="{% url 'login' %}">Login</a></li>
-                      <li><a href="{% url 'register' %}">Register</a></li>
-                  {% endif %}
+
               </ul>
             </li>
           </ul>
