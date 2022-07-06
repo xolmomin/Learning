@@ -24,11 +24,6 @@ class CourseCategory(BaseModel):
     title = CharField(max_length=128)
     slug = SlugField(unique=True)
 
-    def save(self, force_insert=False, force_update=False, using=None, update_fields=None):
-        self.slug = slugify(self.title)
-
-        super().save(force_insert, force_update, using, update_fields)
-
     def __str__(self):
         return self.title
 
@@ -36,6 +31,7 @@ class CourseCategory(BaseModel):
 class Tag(BaseModel):
     name = CharField(max_length=28)
     slug = SlugField(unique=True)
+
 
 class Course(BaseModel):
     title = CharField(max_length=128)
@@ -45,19 +41,13 @@ class Course(BaseModel):
     out = DateTimeField(null=True)
     author = ForeignKey('users.User', CASCADE, "author")
     description = RichTextField()
-    logo = ImageField(upload_to='course-logos/',default='path/to/my/default/image.jpg')
-    picture = ImageField(upload_to='course-picures/',default='path/to/my/default/image.jpg')
+    logo = ImageField(upload_to='course-logos/', default='path/to/my/default/image.jpg')
+    picture = ImageField(upload_to='course-picures/', default='path/to/my/default/image.jpg')
     tags = ManyToManyField("Tag", 'courses')
-    slug = SlugField(unique=True,default='')
-
-    def save(self, force_insert=False, force_update=False, using=None, update_fields=None):
-        self.slug = slugify(self.title)
+    slug = SlugField(unique=True, default='')
 
     def duration(self):
         return self.out - self._in
-
-
-
 
 
 class FeedBack(DescriptionBaseModel):
@@ -66,7 +56,7 @@ class FeedBack(DescriptionBaseModel):
 
 class Chapter(DescriptionBaseModel):
     title = CharField(max_length=128)
-    ForeignKey(Course, CASCADE,"chapters")
+    ForeignKey(Course, CASCADE, "chapters")
 
 
 class Lesson(DescriptionBaseModel):
@@ -74,17 +64,11 @@ class Lesson(DescriptionBaseModel):
     price = DecimalField(max_digits=12, decimal_places=2)
     chapter = ForeignKey(Chapter, CASCADE, "lessons")
     duration = IntegerField()
-    slug= SlugField(unique=True)
-
-    def save(self, force_insert=False, force_update=False, using=None, update_fields=None):
-        self.slug = slugify(self.title)
-
-        super().save(force_insert, force_update, using, update_fields)
+    slug = SlugField(unique=True)
 
 
 class Comment(DescriptionBaseModel):
     course = ForeignKey(Course, CASCADE)
-
 
 
 class Question(BaseModel):
@@ -100,7 +84,6 @@ class Question(BaseModel):
 class Answer(DescriptionBaseModel):
     question = ForeignKey(Question, CASCADE)
     is_true = BooleanField(default=False)
-
 
 
 class ForumCategory(DescriptionBaseModel):  # Form
