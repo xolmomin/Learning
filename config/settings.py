@@ -167,7 +167,7 @@ EMAIL_HOST_PASSWORD = env('EMAIL_HOST_PASSWORD') # app password
 EMAIL_USE_TLS = True
 
 LOGIN_URL = '/'
-LOGIN_REDIRECT_URL = '/'
+LOGIN_REDIRECT_URL = '/student-dashboard/'
 
 PASSWORD_RESET_TIMEOUT = 3600
 
@@ -189,9 +189,6 @@ SITE_ID = 1
 # Provider specific settings
 SOCIALACCOUNT_PROVIDERS = {
     'google': {
-        # For each OAuth based provider, either add a ``SocialApp``
-        # (``socialaccount`` app) containing the required client
-        # credentials, or list them here:
         'APP': {
             'client_id': '856489160437-3qe1ftmu6teq8tchelvs201sdpsdpcri.apps.googleusercontent.com',
             'secret': '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',
@@ -225,5 +222,19 @@ SOCIALACCOUNT_PROVIDERS = {
         'LOCALE_FUNC': lambda request: 'en_US',
         'VERIFIED_EMAIL': False,
         'VERSION': 'v13.0',
-    }
+    },
+    'github': {
+
+        'APP': {
+            'client_id': 'b7772b883e8d888739ae',
+            'secret': 'abca6300a1c4c0ec3402e88fc54aecef41672340',
+            'key': ''
+        },
+
+        'SCOPE': [
+            'user',
+            'repo',
+            'read:org',
+        ],
+    },
 }

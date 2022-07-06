@@ -74,12 +74,16 @@
                   <button class="btn btn-outline-google-plus btn-sm d-block w-100" href="#">
                       <span class="fab fa-google-plus-g me-2" data-fa-transform="grow-8"></span> google</button>
                     </form>
-
                   </div>
                   <div class="col-sm-6"><a class="btn btn-outline-facebook btn-sm d-block w-100" href="#">
                       <span class="fab fa-facebook-square me-2" data-fa-transform="grow-8"></span> facebook</a></div>
-                    <div class="col-sm-6"><a class="btn btn-outline-facebook btn-sm d-block w-100" href="#">
-                      <span class="fab fa-github-square me-2" data-fa-transform="grow-8"></span> github</a></div>
+                    <div class="col-sm-6">
+                        <form action="/accounts/github/login/" method="post">
+                        {% csrf_token %}
+                        <button class="btn btn-outline-facebook btn-sm d-block w-100" href="#">
+                      <span class="fab fa-github-square me-2" data-fa-transform="grow-8"></span> github</button>
+                        </form>
+                    </div>
                     <div class="col-sm-6"><a class="btn btn-outline-facebook btn-sm d-block w-100" href="#">
                       <span class="fab fa-instagram me-2" data-fa-transform="grow-8"></span> instagram</a></div>
                 </div>
