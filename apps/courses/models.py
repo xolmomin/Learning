@@ -5,7 +5,7 @@ from django.utils.text import slugify
 from mptt.fields import TreeForeignKey
 from mptt.models import MPTTModel
 
-from apps.users.models import User
+# from apps.users.models import User
 from shared.models import BaseModel, DescriptionBaseModel
 
 
@@ -29,6 +29,13 @@ class CourseCategory(BaseModel):
 
         super().save(force_insert, force_update, using, update_fields)
 
+    def __str__(self):
+        return self.title
+
+
+class Tag(BaseModel):
+    name = CharField(max_length=28)
+    slug = SlugField(unique=True)
 
 class Course(BaseModel):
     title = CharField(max_length=128)
@@ -36,12 +43,11 @@ class Course(BaseModel):
     price = DecimalField(max_digits=12, decimal_places=2)
     _in = DateTimeField(null=True)
     out = DateTimeField(null=True)
-    author = ForeignKey(User, CASCADE, "author")
-    members = ManyToManyField(User, "members")
+    author = ForeignKey('users.User', CASCADE, "author")
     description = RichTextField()
     logo = ImageField(upload_to='course-logos/',default='path/to/my/default/image.jpg')
     picture = ImageField(upload_to='course-picures/',default='path/to/my/default/image.jpg')
-    tags = ManyToManyField('Tag', 'courses')
+    tags = ManyToManyField("Tag", 'courses')
     slug = SlugField(unique=True,default='')
 
     def save(self, force_insert=False, force_update=False, using=None, update_fields=None):
@@ -51,12 +57,7 @@ class Course(BaseModel):
         return self.out - self._in
 
 
-class Tag(BaseModel):
-    name = CharField(max_length=28)
-    slug = SlugField(unique=True)
 
-    def save(self, force_insert=False, force_update=False, using=None, update_fields=None):
-        self.slug = slugify(self.name)
 
 
 class FeedBack(DescriptionBaseModel):
@@ -85,6 +86,7 @@ class Comment(DescriptionBaseModel):
     course = ForeignKey(Course, CASCADE)
 
 
+
 class Question(BaseModel):
     question = CharField(max_length=256)
     body = RichTextField()
@@ -100,10 +102,6 @@ class Answer(DescriptionBaseModel):
     is_true = BooleanField(default=False)
 
 
-class Certificate(BaseModel):
-    title = CharField(max_length=128)
-    owner = ForeignKey(User, CASCADE)
-
 
 class ForumCategory(DescriptionBaseModel):  # Form
     title = CharField(max_length=128)
@@ -113,4 +111,4 @@ class ForumCategory(DescriptionBaseModel):  # Form
 class Forum(MPTTModel):
     category = ForeignKey(ForumCategory, CASCADE)
     parent = TreeForeignKey('self', CASCADE, 'children')
-    user = ForeignKey(User, CASCADE)
+    user = ForeignKey('users.User', CASCADE)

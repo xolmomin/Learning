@@ -1,6 +1,6 @@
 from django.contrib.auth.base_user import BaseUserManager
 from django.contrib.auth.models import AbstractUser
-from django.db.models import CharField, EmailField, ImageField, ManyToManyField
+from django.db.models import CharField, EmailField, ImageField, ManyToManyField, ForeignKey, CASCADE
 
 from shared.models import BaseModel
 
@@ -25,14 +25,23 @@ class CustomUserManager(BaseUserManager):
 
 
 class User(AbstractUser):
+    INSTRUCTOR = 'instructor'
+    STUDENT = 'student'
+    ROLES = (
+        (INSTRUCTOR, 'instructor'),
+        (STUDENT, 'student')
+    )
     username = CharField(max_length=255)
     email = EmailField(unique=True)
-    role = CharField(max_length=18, choices=(('INSTRUCTOR','instructor'), ('STUDENT','student')))
-    reward = ManyToManyField('Reward', related_name='users')
-    objects = CustomUserManager()
+    role = CharField(max_length=18, choices=ROLES)
+
+    reward = ManyToManyField('Reward', 'users')
+    members = ManyToManyField('courses.Course', 'students')
 
     USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = []
+
+    objects = CustomUserManager()
 
     class Meta:
         verbose_name = 'user'
@@ -41,3 +50,7 @@ class User(AbstractUser):
 class Reward(BaseModel):
     name = CharField(max_length=56)
     logo = ImageField(upload_to='reward-logos/')
+
+class Certificate(BaseModel):
+    title = CharField(max_length=128)
+    owner = ForeignKey(User, CASCADE)
