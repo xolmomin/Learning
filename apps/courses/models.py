@@ -1,8 +1,12 @@
 from ckeditor.fields import RichTextField
 from django.db.models import Model, DateTimeField, TextField, CharField, ForeignKey, ManyToManyField, IntegerField, \
-    DecimalField, CASCADE
+    DecimalField, CASCADE, ImageField, BooleanField, SlugField
+from django.utils.text import slugify
+from mptt.fields import TreeForeignKey
+from mptt.models import MPTTModel
 
 from apps.users.models import User
+from shared.models import BaseModel, DescriptionBaseModel
 
 
 class IntegerRangeField(IntegerField):
@@ -16,44 +20,97 @@ class IntegerRangeField(IntegerField):
         return super(IntegerRangeField, self).formfield(**defaults)
 
 
-class BaseModel(Model):
-    created_at = DateTimeField(auto_now_add=True)
-    updated_at = DateTimeField(auto_now=True)
-    description = TextField(null=True, blank=True)
+class CourseCategory(BaseModel):
+    title = CharField(max_length=128)
+    slug = SlugField(unique=True)
 
-    class Meta:
-        abstract = True
+    def save(self, force_insert=False, force_update=False, using=None, update_fields=None):
+        self.slug = slugify(self.title)
+
+        super().save(force_insert, force_update, using, update_fields)
 
 
 class Course(BaseModel):
     title = CharField(max_length=128)
     rating = IntegerRangeField(min_value=1, max_value=5)
-    out = DateTimeField(null=True, help_text="When the cow went OUT TO Pasture.")
-    _in = DateTimeField(null=True, help_text="When the cow got back IN FROM Pasture.")
     price = DecimalField(max_digits=12, decimal_places=2)
-    author = ForeignKey(User, on_delete=CASCADE, related_name="author")
-    members = ManyToManyField(User, related_name="members")
-    description = RichTextField()
-
-    def duration(self):
-        return self.out - self._in
-
-
-class Chapter(BaseModel):
-    title = CharField(max_length=128)
-    ForeignKey(Course, on_delete=CASCADE)
-
-
-class Lesson(BaseModel):
-    title = CharField(max_length=128)
     _in = DateTimeField(null=True)
     out = DateTimeField(null=True)
-    price = DecimalField(max_digits=12, decimal_places=2)
-    chapter = ForeignKey(Chapter, on_delete=CASCADE)
+    author = ForeignKey(User, CASCADE, "author")
+    members = ManyToManyField(User, "members")
+    description = RichTextField()
+    logo = ImageField(upload_to='course-logos/',default='path/to/my/default/image.jpg')
+    picture = ImageField(upload_to='course-picures/',default='path/to/my/default/image.jpg')
+    tags = ManyToManyField('Tag', 'courses')
+    slug = SlugField(unique=True,default='')
+
+    def save(self, force_insert=False, force_update=False, using=None, update_fields=None):
+        self.slug = slugify(self.title)
 
     def duration(self):
         return self.out - self._in
 
 
-class Comment(BaseModel):
-    course = ForeignKey(Course, on_delete=CASCADE)
+class Tag(BaseModel):
+    name = CharField(max_length=28)
+    slug = SlugField(unique=True)
+
+    def save(self, force_insert=False, force_update=False, using=None, update_fields=None):
+        self.slug = slugify(self.name)
+
+
+class FeedBack(DescriptionBaseModel):
+    title = CharField(max_length=56)
+
+
+class Chapter(DescriptionBaseModel):
+    title = CharField(max_length=128)
+    ForeignKey(Course, CASCADE,"chapters")
+
+
+class Lesson(DescriptionBaseModel):
+    title = CharField(max_length=128)
+    price = DecimalField(max_digits=12, decimal_places=2)
+    chapter = ForeignKey(Chapter, CASCADE, "lessons")
+    duration = IntegerField()
+    slug= SlugField(unique=True)
+
+    def save(self, force_insert=False, force_update=False, using=None, update_fields=None):
+        self.slug = slugify(self.title)
+
+        super().save(force_insert, force_update, using, update_fields)
+
+
+class Comment(DescriptionBaseModel):
+    course = ForeignKey(Course, CASCADE)
+
+
+class Question(BaseModel):
+    question = CharField(max_length=256)
+    body = RichTextField()
+    course = ForeignKey(Course, CASCADE)
+    score = CharField(max_length=12)
+
+    # class Meta:
+    #     index_together = ('question', 'score')
+
+
+class Answer(DescriptionBaseModel):
+    question = ForeignKey(Question, CASCADE)
+    is_true = BooleanField(default=False)
+
+
+class Certificate(BaseModel):
+    title = CharField(max_length=128)
+    owner = ForeignKey(User, CASCADE)
+
+
+class ForumCategory(DescriptionBaseModel):  # Form
+    title = CharField(max_length=128)
+    course = ForeignKey(Course, CASCADE)
+
+
+class Forum(MPTTModel):
+    category = ForeignKey(ForumCategory, CASCADE)
+    parent = TreeForeignKey('self', CASCADE, 'children')
+    user = ForeignKey(User, CASCADE)

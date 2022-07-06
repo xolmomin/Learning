@@ -1,6 +1,8 @@
 from django.contrib.auth.base_user import BaseUserManager
 from django.contrib.auth.models import AbstractUser
-from django.db.models import CharField, EmailField
+from django.db.models import CharField, EmailField, ImageField, ManyToManyField
+
+from shared.models import BaseModel
 
 
 class CustomUserManager(BaseUserManager):
@@ -25,6 +27,8 @@ class CustomUserManager(BaseUserManager):
 class User(AbstractUser):
     username = CharField(max_length=255)
     email = EmailField(unique=True)
+    role = CharField(max_length=18, choices=(('INSTRUCTOR','instructor'), ('STUDENT','student')))
+    reward = ManyToManyField('Reward', related_name='users')
     objects = CustomUserManager()
 
     USERNAME_FIELD = 'email'
@@ -33,3 +37,7 @@ class User(AbstractUser):
     class Meta:
         verbose_name = 'user'
         verbose_name_plural = 'users'
+
+class Reward(BaseModel):
+    name = CharField(max_length=56)
+    logo = ImageField(upload_to='reward-logos/')
