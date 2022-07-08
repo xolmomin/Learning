@@ -1,4 +1,3 @@
-from apps.users.token import account_activation_token
 from django.contrib.auth import authenticate
 from django.contrib.auth.forms import AuthenticationForm
 from django.contrib.sites.shortcuts import get_current_site
@@ -11,6 +10,7 @@ from django.utils.encoding import force_bytes
 from django.utils.http import urlsafe_base64_encode
 
 from apps.users.models import User
+from apps.users.token import account_activation_token
 from config.settings import EMAIL_HOST_USER
 
 
@@ -37,6 +37,8 @@ class RegisterForm(Form):
         confirm_password = self.data.get('confirm_password')
         if password != confirm_password:
             raise ValidationError('Confirmation password is wrong')
+
+        return password
 
     @atomic
     def save(self):
@@ -94,12 +96,28 @@ class ForgotPasswordForm(Form):
         return email
 
 
-def send_email(email, request, _type):
+class ResetPasswordForm(Form):
+    password = CharField(max_length=255)
+    confirm_password = CharField(max_length=255)
 
+    def clean_password(self):
+        password = self.cleaned_data.get('password')
+        confirm_password = self.cleaned_data.get('confirm_password')
+        if password != confirm_password:
+            raise ValidationError('Password is not match')
+        return password
+
+
+def send_email(email, request, _type):
     user = User.objects.get(email=email)
     subject = 'Activate your account'
     current_site = get_current_site(request)
-    message = render_to_string('apps/auth/activation_account.html', {
+    if _type == 'register':
+        html_page = 'apps/auth/activation_account.html' # for register
+    else:
+        html_page = 'apps/auth/activation_account.html' # for reset password
+
+    message = render_to_string(html_page, {
         'user': user,
         'domain': current_site.domain,
         'uid': urlsafe_base64_encode(force_bytes(str(user.pk))),

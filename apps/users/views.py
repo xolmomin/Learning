@@ -1,7 +1,7 @@
+from allauth.account.forms import SetPasswordForm
 from django.contrib import messages
-from django.contrib import messages
-from django.contrib.auth import login, authenticate
-from django.contrib.auth.views import LoginView, LogoutView
+from django.contrib.auth import login
+from django.contrib.auth.views import LoginView, LogoutView, PasswordResetConfirmView
 from django.http import HttpResponse
 from django.shortcuts import redirect
 from django.urls import reverse_lazy
@@ -57,7 +57,7 @@ class Login(LoginView):
 
 class Register(FormView):
     form_class = RegisterForm
-    success_url = reverse_lazy('reset_password')
+    success_url = reverse_lazy('register')
     template_name = 'apps/auth/register.html'
 
     def form_valid(self, form):
@@ -84,12 +84,25 @@ class ForgotPasswordPage(FormView):
         send_email(form.data.get('email'), self.request, 'forgot')
         return super().form_valid(form)
 
+
+class ResetPassword(PasswordResetConfirmView):
+    success_url = reverse_lazy('student_dashboard')
+    template_name = 'apps/auth/reset_password.html'
+
+    def form_valid(self, form):
+        return super().form_valid(form)
+
     def form_invalid(self, form):
         return super().form_invalid(form)
 
-
-class ResetPassword(TemplateView):
-    template_name = 'apps/auth/reset_password.html'
+    # def get(self, request, *args, **kwargs):
+    #     return super().get(request, *args, **kwargs)
+    #
+    # def post(self, request, *args, **kwargs):
+    #     return super().post(request, *args, **kwargs)
+    #
+    # def put(self, *args, **kwargs):
+    #     return super().put(*args, **kwargs)
 
 
 class ActivateEmailView(TemplateView):
@@ -114,6 +127,6 @@ class ActivateEmailView(TemplateView):
                 level=messages.SUCCESS,
                 message="Your account successfully activated!"
             )
-            return redirect('reset_password')
+            return redirect('index_page')
         else:
             return HttpResponse('Activation link is invalid!')
