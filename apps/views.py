@@ -7,4 +7,3 @@ class IndexPage(TemplateView):
 
 class StudentDashboard(TemplateView):
     template_name = 'apps/students/app-student-dashboard.html'
-

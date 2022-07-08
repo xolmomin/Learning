@@ -1,5 +1,5 @@
 from ckeditor.fields import RichTextField
-from django.db.models import Model, DateTimeField, TextField, CharField, ForeignKey, ManyToManyField, IntegerField, \
+from django.db.models import Model, DateTimeField, CharField, ForeignKey, ManyToManyField, IntegerField, \
     DecimalField, CASCADE, ImageField, BooleanField, SlugField
 from django.utils.text import slugify
 from mptt.fields import TreeForeignKey
@@ -37,6 +37,14 @@ class Tag(BaseModel):
     name = CharField(max_length=28)
     slug = SlugField(unique=True)
 
+    # def save(self, force_insert=False, force_update=False, using=None, update_fields=None):
+    #     if not self.slug:
+    #         self.slug = slugify(self.name)
+    #         while Tag.objects.filter(slug=self.slug).exists():
+    #             self.slug = f'{self.slug}-1'
+    #
+    #     super().save(force_insert, force_update, using, update_fields)
+
 class Course(BaseModel):
     title = CharField(max_length=128)
     rating = IntegerRangeField(min_value=1, max_value=5)
@@ -45,19 +53,21 @@ class Course(BaseModel):
     out = DateTimeField(null=True)
     author = ForeignKey('users.User', CASCADE, "author")
     description = RichTextField()
-    logo = ImageField(upload_to='course-logos/',default='path/to/my/default/image.jpg')
-    picture = ImageField(upload_to='course-picures/',default='path/to/my/default/image.jpg')
+    logo = ImageField(upload_to='course-logos/', default='path/to/my/default/image.jpg')
+    picture = ImageField(upload_to='course-picures/', default='path/to/my/default/image.jpg')
     tags = ManyToManyField("Tag", 'courses')
-    slug = SlugField(unique=True,default='')
+    slug = SlugField(unique=True, default='')
 
     def save(self, force_insert=False, force_update=False, using=None, update_fields=None):
-        self.slug = slugify(self.title)
+        if not self.slug:
+            self.slug = slugify(self.title)
+            while Course.objects.filter(slug=self.slug).exists():
+                self.slug = f'{self.slug}-1'
+
+        super().save(force_insert, force_update, using, update_fields)
 
     def duration(self):
         return self.out - self._in
-
-
-
 
 
 class FeedBack(DescriptionBaseModel):
@@ -66,7 +76,7 @@ class FeedBack(DescriptionBaseModel):
 
 class Chapter(DescriptionBaseModel):
     title = CharField(max_length=128)
-    ForeignKey(Course, CASCADE,"chapters")
+    ForeignKey(Course, CASCADE, "chapters")
 
 
 class Lesson(DescriptionBaseModel):
@@ -74,7 +84,7 @@ class Lesson(DescriptionBaseModel):
     price = DecimalField(max_digits=12, decimal_places=2)
     chapter = ForeignKey(Chapter, CASCADE, "lessons")
     duration = IntegerField()
-    slug= SlugField(unique=True)
+    slug = SlugField(unique=True)
 
     def save(self, force_insert=False, force_update=False, using=None, update_fields=None):
         self.slug = slugify(self.title)
@@ -84,7 +94,6 @@ class Lesson(DescriptionBaseModel):
 
 class Comment(DescriptionBaseModel):
     course = ForeignKey(Course, CASCADE)
-
 
 
 class Question(BaseModel):
@@ -100,7 +109,6 @@ class Question(BaseModel):
 class Answer(DescriptionBaseModel):
     question = ForeignKey(Question, CASCADE)
     is_true = BooleanField(default=False)
-
 
 
 class ForumCategory(DescriptionBaseModel):  # Form

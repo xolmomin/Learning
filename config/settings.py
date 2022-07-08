@@ -1,8 +1,8 @@
 import os
 import sys
 from pathlib import Path
-import environ
 
+import environ
 
 env = environ.Env(
     # set casting, default value
@@ -31,17 +31,16 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
 
-    #apps
-    'apps.users',
-    'apps.courses',
-    'apps.billings',
+    # apps
+    'apps.users.apps.UsersConfig',
+    'apps.courses.apps.CoursesConfig',
+    'apps.billings.apps.BillingsConfig',
 
     # ... include the providers you want to enable:
 
     'django.contrib.sites',
     'allauth',
     'ckeditor',
-
 
     'allauth.account',
     'allauth.socialaccount',
@@ -93,22 +92,22 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'config.wsgi.application'
 
-
 # Database
 # https://docs.djangoproject.com/en/4.0/ref/settings/#databases
 
 
 DATABASES = {
-    'default':{
-            'ENGINE': 'django.db.backends.postgresql_psycopg2',
-            'NAME':env("DB_NAME"),
-            'USER':env("DB_USER"),
-            'PASSWORD':env("DB_PASSWORD"),
-            'HOST':env("DB_HOST"),
-            'PORT': 5432
-            },
+    'default': {
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': BASE_DIR / 'db.sqlite3',
+        # 'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        # 'NAME':env("DB_NAME"),
+        # 'USER':env("DB_USER"),
+        # 'PASSWORD':env("DB_PASSWORD"),
+        # 'HOST':env("DB_HOST"),
+        # 'PORT': 5432
+    },
 }
-
 
 # https://docs.djangoproject.com/en/4.0/ref/settings/#auth-password-validators
 
@@ -127,7 +126,6 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
-
 # Internationalization
 # https://docs.djangoproject.com/en/4.0/topics/i18n/
 
@@ -138,7 +136,6 @@ TIME_ZONE = 'Asia/Tashkent'
 USE_I18N = True
 
 USE_TZ = True
-
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.0/howto/static-files/
@@ -157,13 +154,13 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-#smtp
+# smtp
 
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_PORT = 587
 EMAIL_HOST_USER = env('EMAIL_HOST_USER')
-EMAIL_HOST_PASSWORD = env('EMAIL_HOST_PASSWORD') # app password
+EMAIL_HOST_PASSWORD = env('EMAIL_HOST_PASSWORD')  # app password
 EMAIL_USE_TLS = True
 
 LOGIN_URL = '/'
@@ -171,10 +168,10 @@ LOGIN_REDIRECT_URL = '/student-dashboard/'
 
 PASSWORD_RESET_TIMEOUT = 3600
 
-#ckeditor
+# ckeditor
 CKEDITOR_UPLOAD_PATH = "uploads/"
 
-#django allauth
+# django allauth
 
 AUTHENTICATION_BACKENDS = [
     # Needed to login by username in Django admin, regardless of `allauth`
