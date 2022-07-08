@@ -45,6 +45,7 @@ class Tag(BaseModel):
     #
     #     super().save(force_insert, force_update, using, update_fields)
 
+
 class Course(BaseModel):
     title = CharField(max_length=128)
     rating = IntegerRangeField(min_value=1, max_value=5)
@@ -109,6 +110,7 @@ class Question(BaseModel):
 class Answer(DescriptionBaseModel):
     question = ForeignKey(Question, CASCADE)
     is_true = BooleanField(default=False)
+
 
 
 class ForumCategory(DescriptionBaseModel):  # Form

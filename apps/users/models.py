@@ -47,9 +47,11 @@ class User(AbstractUser):
         verbose_name = 'user'
         verbose_name_plural = 'users'
 
+
 class Reward(BaseModel):
     name = CharField(max_length=56)
     logo = ImageField(upload_to='reward-logos/')
+
 
 class Certificate(BaseModel):
     title = CharField(max_length=128)
